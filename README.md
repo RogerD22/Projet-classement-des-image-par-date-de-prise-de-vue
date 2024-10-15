@@ -25,21 +25,22 @@
    - En cas de fichier portant le même nom dans le répertoire cible, un numéro incrémental est ajouté au fichier pour éviter l'écrasement (ex : `photo_01.jpg`, `photo_02.jpg`).
    - *Dépend de 3.*
 
-#### Fonctionnalités optionnelles (Compléments) :
 5. **Détection et suppression des doublons exacts** :
    - Comparaison des fichiers source et cible pour vérifier s'ils sont identiques (via un hash ou une comparaison byte à byte ou pixel par pixel mais qui demande beaucoup plus de temps de traitement) et suppression du fichier source si identique.
    - Modifier #3 pour ajouter une vérification des doublons avant le déplacement des fichiers.
 
-6. **Support d'autres formats d'images** :
-   - Support possible pour d'autres formats d'image (comme PNG, TIFF), si compatibles avec EXIF.
-   - Modifier #1 pour lire les métadonnées EXIF d'autres formats d'images.
-   - *Dépend de #5 (lecture des métadonnées)*
-
-
-7. **Interface utilisateur (CLI ou GUI)** :
+6. **Interface utilisateur (CLI ou GUI)** :
    - Ajout de paramètres configurables via une interface en ligne de commande (par exemple : chemin d'entrée, modèle de répertoire, etc.).
    - Modifier #2 pour permettre la configuration via une interface utilisateur.
    - *Dépend de #6 (support des formats)*
+
+#### Fonctionnalités optionnelles (Compléments) :
+
+
+7. **Support d'autres formats d'images** :
+   - Support possible pour d'autres formats d'image (comme PNG, TIFF), si compatibles avec EXIF.
+   - Modifier #1 pour lire les métadonnées EXIF d'autres formats d'images.
+   - *Dépend de #5 (lecture des métadonnées)*
 
 
 8. **Développement d’un cache pour éviter la réanalyse des photos déjà traitées** :
