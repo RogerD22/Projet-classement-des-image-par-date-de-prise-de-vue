@@ -6,6 +6,7 @@
 - Mohamed-Ousalem YAHIAOUI [RogerD22](https://github.com/RogerD22)
 - Youssef BEN TANFOUS [YoussefBT0](https://github.com/YoussefBT0)
 
+## Premier rendu :
 
 ### Fonctionnalités du projet
 
@@ -14,12 +15,12 @@
    - Extraction de la date de prise de vue des images JPEG pour les classer correctement.
 
 2. **Création d'une structure de répertoires basée sur des paramètres** :
-   - Génération d’une arborescence de répertoires en fonction de la date de prise de vue, incluant l’année, le mois, le jour, l’heure, les minutes et les secondes (ex : `Photos/{year}/{month}/{day}/{hour}_{minute}_{second}/{basename}`).
+   - Génération d’une arborescence de répertoires en fonction de la date de prise de vue, incluant l’année, le mois, le jour, l’heure, les minutes et les secondes (ex : `Photos/{year}/{month}/{basename}`).
    - *Dépend de 1.*
 
 3. **Déplacement des fichiers vers les répertoires appropriés** :
    - Déplacement des fichiers JPEG vers les répertoires correspondants tout en conservant leur nom de base.
-   - *Dépend de 2.*
+   - *Dépend de 4.*
 
 4. **Gestion des conflits de noms** :
    - En cas de fichier portant le même nom dans le répertoire cible, un numéro incrémental est ajouté au fichier pour éviter l'écrasement (ex : `photo_01.jpg`, `photo_02.jpg`).
@@ -71,3 +72,130 @@
   - Support pour d'autres formats d'images
 
 
+## Deuxieme rendu : Bibliothèques à garder pour le projet
+
+### 1. **Pillow**
+- **Service rendu** :  
+    Permet d’accéder aux métadonnées EXIF d'images (JPEG notamment) et de manipuler des fichiers image.
+- **Limites** :  
+    - Ne couvre que les images compatibles avec EXIF (pas de PNG).  
+    - Ne gère pas les conflits de noms ni le déplacement des fichiers.
+- **Facilité d’installation** :  
+    Installation simple via `pip install pillow`.
+- **Facilité d’utilisation** :  
+    API intuitive : `Image.open()._getexif()`.
+- **Compatibilité** :  
+    Bien intégré, sans problème majeur connu.
+- **Communauté & documentation** :  
+    Documentation complète et bien structurée disponible [ici](https://pillow.readthedocs.io/).
+
+
+
+### 2. **os** (standard Python)
+- **Service rendu** :  
+    Gestion de fichiers et répertoires : création, suppression, détection de conflits de noms.
+- **Limites** :  
+    Nécessite `shutil` pour des opérations plus complexes.
+- **Facilité d’installation** :  
+    Inclus dans Python par défaut.
+- **Facilité d’utilisation** :  
+    Utilisation simple avec `os.path`, `os.listdir()`, `os.rename()`.
+- **Compatibilité** :  
+    Bien intégré, sans problème majeur connu.
+- **Communauté & documentation** :
+    Documentation complète et bien structurée disponible [ici](https://docs.python.org/3/library/os.html).
+
+
+
+
+### 3. **hashlib** (standard Python)
+- **Service rendu** :  
+    Génération de hash pour détecter des doublons (MD5, SHA256, etc.).
+- **Limites** :  
+    Ne gère pas directement les conflits de noms.
+- **Facilité d’installation** :  
+    Inclus directement dans Python.
+
+- **Facilité d’utilisation** :  
+    Exemple d’utilisation :  
+    ```python
+    hashlib.md5(open(file, 'rb').read()).hexdigest()
+    ```
+    
+- **Compatibilité** :  
+    Bien intégré, sans problème majeur connu.
+- **Communauté & documentation** :
+    Documentation complète et bien structurée disponible [ici](https://docs.python.org/3/library/hashlib.html).
+
+
+
+### 4. **argparse** (standard Python)
+- **Service rendu** :  
+    Fournit une interface en ligne de commande pour passer des arguments et options à l’exécution (ex. chemin source).
+- **Limites** :  
+    Interface limitée à l'utilisation en terminal, elle ne propose pas de gestion graphique.
+- **Facilité d’installation** :  
+    Installation simple via `pip install argparse`
+
+- **Facilité d’utilisation** :  
+    API simple et intuitive : 
+    ```python
+    import argparse
+    parser = argparse.ArgumentParser(description='Description du script.')
+    parser.add_argument('chemin', type=str, help='Chemin du répertoire source')
+    args = parser.parse_args()
+    ```
+
+- **Compatibilité** :
+    Bien intégré, sans problème majeur connu.
+- **Communauté & documentation** :
+    Documentation complète et bien structurée disponible [ici](https://docs.python.org/3/library/argparse.html).
+
+
+
+### 5. **shutil** (standard Python)
+- **Service rendu** :  
+    Offre des fonctions de manipulation avancée de fichiers et répertoires, comme le déplacement, la copie et la suppression.
+- **Limites** :  
+    - Ne gère pas directement les conflits de noms (nécessite un traitement manuel avec `os`).  
+    - Certaines opérations peuvent échouer si les permissions sont insuffisantes.
+- **Facilité d’installation** :  
+    Inclus par défaut avec Python, aucune installation supplémentaire nécessaire.
+  
+- **Facilité d’utilisation** :  
+    Simple à utiliser :
+    ```python
+    import shutil
+
+    # Déplacer un fichier
+    shutil.move('source.jpg', 'destination/')
+
+    # Copier un fichier
+    shutil.copy('source.jpg', 'destination/')
+    ```
+
+- **Compatibilité** :
+    Bien intégré, sans problème majeur connu.
+- **Communauté & documentation** :
+    Documentation complète et bien structurée disponible [ici](https://docs.python.org/3/library/shutil.html).
+
+
+### 6. **logging** (standard Python)  
+- **Service rendu** :  
+    Fournit un système de gestion de journaux (logs) pour suivre l’exécution du programme et détecter les erreurs ou avertissements.
+- **Limites** :  
+    - L’analyse des journaux est manuelle (pas d’analyse automatisée).  
+    - Ne permet pas nativement la rotation de fichiers volumineux (nécessite `RotatingFileHandler` pour cela).
+- **Facilité d’installation** :  
+    Inclus par défaut dans Python, aucune installation supplémentaire nécessaire.
+- **Facilité d’utilisation** :  
+    Facile à configurer et personnaliser
+- **Compatibilité** :
+    Bien intégré, sans problème majeur connu.
+- **Communauté & documentation** :
+    Documentation complète et bien structurée disponible [ici](https://docs.python.org/3/library/logging.html).
+
+### Optionnelles :
+   - pytest (pour tester le projet)
+   - Tkinter (si on veut ajouter une interface graphique simple)
+   - PyQt ou Kivy (pour une interface graphique plus avancée)
