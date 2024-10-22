@@ -110,7 +110,7 @@
 
 ### 3. **hashlib** (standard Python)
 - **Service rendu** :  
-    Génération de hash pour détecter des doublons (MD5, SHA256, etc.).
+    Génération de hash pour détecter des doublons (SHA512).
 - **Limites** :  
     Ne gère pas directement les conflits de noms.
 - **Facilité d’installation** :  
@@ -119,7 +119,7 @@
 - **Facilité d’utilisation** :  
     Exemple d’utilisation :  
     ```python
-    hashlib.md5(open(file, 'rb').read()).hexdigest()
+    hashlib.SHA512(open(file, 'rb').read()).hexdigest()
     ```
     
 - **Compatibilité** :  
@@ -199,3 +199,12 @@
    - pytest (pour tester le projet)
    - Tkinter (si on veut ajouter une interface graphique simple)
    - PyQt ou Kivy (pour une interface graphique plus avancée)
+
+
+### Notes du prof :
+
+    - A la place de pillow essayer : bibliotheque hachoir / exifread
+    - pathlib a la place de os
+    - pyside pour l'interface graphique
+    - pour gere le cache utiliser DBM ou sqlit
+    - Tkinter à oublier car pas fou
