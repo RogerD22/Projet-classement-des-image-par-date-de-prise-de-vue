@@ -1,10 +1,15 @@
+import cache
 import hashlib
 from exif import Image as ExifImage
 from pathlib import Path
 from datetime import datetime
 import shutil
+import json
 
+CACHE_FILE = "cache_hachages.json"
 
+# Charger le cache au début
+cache_hachages = cache.charger_cache_hachages(CACHE_FILE)
 
 def extraire_date_prise_vue(image_path):
     """Extrait la date de prise de vue à partir des métadonnées EXIF."""
@@ -25,7 +30,6 @@ def creer_dossier_destination(repertoire_destination, date_prise_vue, format_org
     dossier_destination.mkdir(parents=True, exist_ok=True)
     return dossier_destination
 
-
 def gerer_conflits_noms(chemin_destination):
     """Gère les conflits de noms en ajoutant un suffixe numérique si nécessaire."""
     base_name = chemin_destination.stem  
@@ -41,16 +45,22 @@ def gerer_conflits_noms(chemin_destination):
 
 def calculer_hash_fichier(image_path):
     """Calcule le hash MD5 d'un fichier."""
+    # Vérifiez si le hash est déjà dans le cache
+    if str(image_path) in cache_hachages:
+        return cache_hachages[str(image_path)]
+
     hash_md5 = hashlib.md5()
     try:
         with open(image_path, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_md5.update(chunk)
-        return hash_md5.hexdigest()
-    except Exception as e:
-        print(f"Erreur lors du calcul du hash pour {image_path} : {e}")
+        # Ajouter le hash au cache
+        hash_value = hash_md5.hexdigest()
+        cache_hachages[str(image_path)] = hash_value
+        cache.sauvegarder_cache_hachages(CACHE_FILE, cache_hachages)  
+        return hash_value
+    except Exception:
         return None
-
 
 def fichier_est_dupliqué(image_path, dossier_destination):
     """Vérifie si un fichier identique existe déjà dans le dossier de destination."""
@@ -83,7 +93,6 @@ def deplacer_image(image_path, dossier_destination):
     except Exception as e:
         print(f"Erreur lors du déplacement de {image_path} : {e}")
 
-
 def organiser_photos(repertoire_source, repertoire_destination, format_organisation):
     """Organise les photos en sous-dossiers basés sur le format d'organisation choisi par l'utilisateur."""
     repertoire_source = Path(repertoire_source)
@@ -105,4 +114,6 @@ def organiser_photos(repertoire_source, repertoire_destination, format_organisat
                 deplacer_image(image_path, dossier_destination)
             else:
                 print(f"Aucune date EXIF trouvée pour {image_path}. Fichier ignoré.")
-
+                
+"""Sauvegarder le cache à la fin"""
+cache.sauvegarder_cache_hachages(CACHE_FILE, cache_hachages)

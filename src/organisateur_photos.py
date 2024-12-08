@@ -21,7 +21,7 @@ if __name__ == "__main__":
     if args.format:
         format_organisation = args.format  
     elif args.mois:
-        format_organisation = "%Y/%m"  
+        format_organisation = "%m"  
     elif args.annee:
         format_organisation = "%Y"  
     elif args.annee_mois:
