@@ -4,7 +4,6 @@ from exif import Image as ExifImage
 from pathlib import Path
 from datetime import datetime
 import shutil
-import json
 
 CACHE_FILE = "cache_hachages.json"
 
@@ -59,7 +58,8 @@ def calculer_hash_fichier(image_path):
         cache_hachages[str(image_path)] = hash_value
         cache.sauvegarder_cache_hachages(CACHE_FILE, cache_hachages)  
         return hash_value
-    except Exception:
+    except Exception as e:
+        print(f"Erreur lors du calcul du hash pour {image_path} : {e}")
         return None
 
 def fichier_est_dupliqué(image_path, dossier_destination):
