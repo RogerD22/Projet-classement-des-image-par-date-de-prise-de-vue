@@ -7,8 +7,8 @@ import shutil
 
 CACHE_FILE = "cache_hachages.json"
 
-# Charger le cache au début
-cache_hachages = cache.charger_cache_hachages(CACHE_FILE)
+"""Charger le cache au début"""
+cache_hachages = cache.charger_cache_hachages(CACHE_FILE) if Path(CACHE_FILE).exists() else {}
 
 def extraire_date_prise_vue(image_path):
     """Extrait la date de prise de vue à partir des métadonnées EXIF."""
