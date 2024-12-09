@@ -34,4 +34,4 @@ if __name__ == "__main__":
     else:
         format_organisation = "%Y/%B"
 
-    utils.organiser_photos(args.source, args.destination, format_organisation)
+    utils.organiser_photos(format_organisation, args.source, args.destination)
