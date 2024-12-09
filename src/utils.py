@@ -8,7 +8,7 @@ import shutil
 CACHE_FILE = "cache_hachages.json"
 
 """Charger le cache au début"""
-cache_hachages = cache.charger_cache_hachages(CACHE_FILE) if Path(CACHE_FILE).exists() else {}
+cache_hachages = cache.charger_cache_hachages(CACHE_FILE)
 
 def extraire_date_prise_vue(image_path):
     """Extrait la date de prise de vue à partir des métadonnées EXIF."""
@@ -22,7 +22,7 @@ def extraire_date_prise_vue(image_path):
     return None
 
 
-def creer_dossier_destination(repertoire_destination, date_prise_vue, format_organisation):
+def creer_dossier_destination(format_organisation, repertoire_destination, date_prise_vue):
     """Crée un dossier basé sur le format d'organisation spécifié par l'utilisateur."""
     format_organisation_str = date_prise_vue.strftime(format_organisation)
     dossier_destination = repertoire_destination / format_organisation_str
@@ -93,7 +93,7 @@ def deplacer_image(image_path, dossier_destination):
     except Exception as e:
         print(f"Erreur lors du déplacement de {image_path} : {e}")
 
-def organiser_photos(repertoire_source, repertoire_destination, format_organisation):
+def organiser_photos(format_organisation, repertoire_source, repertoire_destination):
     """Organise les photos en sous-dossiers basés sur le format d'organisation choisi par l'utilisateur."""
     repertoire_source = Path(repertoire_source)
     repertoire_destination = Path(repertoire_destination)
@@ -104,13 +104,16 @@ def organiser_photos(repertoire_source, repertoire_destination, format_organisat
     if not any(repertoire_source.iterdir()):
         print(f"Le répertoire source {repertoire_source} est vide.")
         return
+    if not repertoire_destination.exists():
+        print(f"Le répertoire destination {repertoire_destination} n'existe pas. Création du répertoire...")
+        repertoire_destination.mkdir(parents=True, exist_ok=True)
 
     for image_path in repertoire_source.glob("*"):
         if image_path.suffix.lower() in {".jpg", ".jpeg"}:
             print(f"Fichier trouvé ! : {image_path}")
             date_prise_vue = extraire_date_prise_vue(image_path)
             if date_prise_vue:
-                dossier_destination = creer_dossier_destination(repertoire_destination, date_prise_vue, format_organisation)
+                dossier_destination = creer_dossier_destination(format_organisation, repertoire_destination, date_prise_vue )
                 deplacer_image(image_path, dossier_destination)
             else:
                 print(f"Aucune date EXIF trouvée pour {image_path}. Fichier ignoré.")
