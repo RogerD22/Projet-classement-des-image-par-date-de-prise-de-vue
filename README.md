@@ -6,6 +6,37 @@
 - Mohamed-Ousalem YAHIAOUI [RogerD22](https://github.com/RogerD22)
 - Youssef BEN TANFOUS [YoussefBT0](https://github.com/YoussefBT0)
 
+
+## Bibliothèques Utilisées
+
+- `hashlib`
+- `exif`
+- `pathlib`
+- `datetime`
+- `shutil`
+- `json`
+- `argparse`
+
+## Présentation de la Structure du Code
+- **`src/utils.py`**: Contient les fonctions principales pour extraire les métadonnées EXIF, calculer les hashes des fichiers, vérifier les doublons, gérer les conflits de noms et déplacer les images.
+- **`src/cache.py`**: Gère le chargement et la sauvegarde du cache des hashes des fichiers.
+- **`src/organisateur_photos.py`**: Point d'entrée du programme avec une interface utilisateur en ligne de commande utilisant `argparse`.
+
+## Répartition du Travail
+
+### Travail de BEN TANFOUS Youssef
+- **Fonction `creer_dossier_destination`**: Permet de créer les dossiers de destination selon le format d'organisation choisi (par année, mois, etc.).
+- **Fonction `gerer_conflits_noms`**: Gère les conflits de noms en ajoutant un suffixe unique pour éviter les écrasements de fichiers.
+- **Fonction `deplacer_image`**: Déplace les images dans les dossiers de destination après avoir vérifié les doublons et résolu les conflits de noms.
+- **Mise en place de l'interface utilisateur avec `argparse`**: Implémente les options de ligne de commande permettant de spécifier le dossier source, le dossier de destination, et le format d'organisation.
+
+### Travail de YAHIAOUI Mohamed-Ousalem
+- **Fonction `extraire_date_prise_vue`**: Extrait la date de prise de vue des métadonnées EXIF des fichiers image.
+- **Fonction `calculer_hash_fichier`**: Calcule le hash MD5 des fichiers pour identifier les doublons.
+- **Fonction `fichier_est_dupliqué`**: Vérifie si un fichier identique existe déjà dans le dossier de destination en comparant les hashes.
+- **Intégration dans `organiser_photos`**: Combine les différentes fonctions pour extraire les métadonnées, vérifier les doublons, et organiser les fichiers.
+- **Création du cache**: Mise en place du système de cache pour éviter la réanalyse des photos déjà traitées.
+
 ## Premier rendu :
 
 ### Fonctionnalités du projet
