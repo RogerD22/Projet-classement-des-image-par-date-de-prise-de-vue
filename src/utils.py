@@ -22,7 +22,7 @@ def extraire_date_prise_vue(image_path):
     return None
 
 
-def creer_dossier_destination(format_organisation, repertoire_destination, date_prise_vue):
+def creer_dossier_destination(repertoire_destination, date_prise_vue, format_organisation):
     """Crée un dossier basé sur le format d'organisation spécifié par l'utilisateur."""
     format_organisation_str = date_prise_vue.strftime(format_organisation)
     dossier_destination = repertoire_destination / format_organisation_str
@@ -93,30 +93,32 @@ def deplacer_image(image_path, dossier_destination):
     except Exception as e:
         print(f"Erreur lors du déplacement de {image_path} : {e}")
 
-def organiser_photos(format_organisation, repertoire_source, repertoire_destination):
+def organiser_photos(repertoire_source, repertoire_destination, format_organisation):
     """Organise les photos en sous-dossiers basés sur le format d'organisation choisi par l'utilisateur."""
-    repertoire_source = Path(repertoire_source)
-    repertoire_destination = Path(repertoire_destination)
+    try:
+        repertoire_source = Path(repertoire_source)
+        repertoire_destination = Path(repertoire_destination)
 
-    if not repertoire_source.is_dir():
-        print(f"Le répertoire source {repertoire_source} n'existe pas.")
-        return
-    if not any(repertoire_source.iterdir()):
-        print(f"Le répertoire source {repertoire_source} est vide.")
-        return
-    if not repertoire_destination.exists():
-        print(f"Le répertoire destination {repertoire_destination} n'existe pas. Création du répertoire...")
-        repertoire_destination.mkdir(parents=True, exist_ok=True)
+        if not repertoire_source.is_dir():
+            print(f"Le répertoire source {repertoire_source} n'existe pas.")
+            return None
+        if not any(repertoire_source.iterdir()):
+            print(f"Le répertoire source {repertoire_source} est vide.")
+            return None
+        if not repertoire_destination.exists():
+            print(f"Le répertoire destination {repertoire_destination} n'existe pas. Création du répertoire...")
+            repertoire_destination.mkdir(parents=True, exist_ok=True)
 
-    for image_path in repertoire_source.glob("*"):
-        if image_path.suffix.lower() in {".jpg", ".jpeg"}:
-            print(f"Fichier trouvé ! : {image_path}")
-            date_prise_vue = extraire_date_prise_vue(image_path)
-            if date_prise_vue:
-                dossier_destination = creer_dossier_destination(format_organisation, repertoire_destination, date_prise_vue )
-                deplacer_image(image_path, dossier_destination)
-            else:
-                print(f"Aucune date EXIF trouvée pour {image_path}. Fichier ignoré.")
-                
-"""Sauvegarder le cache à la fin"""
-cache.sauvegarder_cache_hachages(CACHE_FILE, cache_hachages)
+        for image_path in repertoire_source.glob("*"):
+            if image_path.suffix.lower() in {".jpg", ".jpeg"}:
+                print(f"Fichier trouvé ! : {image_path}")
+                date_prise_vue = extraire_date_prise_vue(image_path)
+                if date_prise_vue:
+                    dossier_destination = creer_dossier_destination(repertoire_destination, date_prise_vue, format_organisation)
+                    deplacer_image(image_path, dossier_destination)
+                else:
+                    print(f"Aucune date EXIF trouvée pour {image_path}. Fichier ignoré.")
+    except Exception as e:
+        print(f"Erreur lors de l'organisation des photos : {e}")
+    finally:
+        cache.sauvegarder_cache_hachages(CACHE_FILE, cache_hachages)

@@ -21,6 +21,7 @@ if __name__ == "__main__":
     group.add_argument("-a", "--annee", action="store_true", help="Organiser les photos par année, avec le format '%%Y'.")
     group.add_argument("-am", "--annee_mois", action="store_true", help="Organiser les photos par année et mois, avec le format '%%Y/%%B'.")
     
+    
     args = parser.parse_args()
 
     if args.format:
@@ -34,4 +35,4 @@ if __name__ == "__main__":
     else:
         format_organisation = "%Y/%B"
 
-    utils.organiser_photos(format_organisation, args.source, args.destination)
+    utils.organiser_photos(args.source, args.destination, format_organisation)
