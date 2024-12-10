@@ -43,18 +43,17 @@ def gerer_conflits_noms(chemin_destination):
 
 
 def calculer_hash_fichier(image_path):
-    """Calcule le hash MD5 d'un fichier."""
-    # Vérifiez si le hash est déjà dans le cache
+    """Vérifiez si le hash est déjà dans le cache"""
     if str(image_path) in cache_hachages:
         return cache_hachages[str(image_path)]
-
+    """Calcule le hash MD5 d'un fichier."""
     hash_md5 = hashlib.md5()
     try:
         with open(image_path, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_md5.update(chunk)
-        # Ajouter le hash au cache
         hash_value = hash_md5.hexdigest()
+        """Ajouter le hash au cache"""
         cache_hachages[str(image_path)] = hash_value
         cache.sauvegarder_cache_hachages(CACHE_FILE, cache_hachages)  
         return hash_value
